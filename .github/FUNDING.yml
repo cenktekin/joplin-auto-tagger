@@ -1,0 +1,14 @@
+# Sponsors and donations configuration for GitHub
+# Add the platforms you use and your handles/links
+
+# Supported keys: github, patreon, open_collective, ko_fi, tidelift, community_bridge, liberapay, issuehunt, otechie, custom
+
+# Example setups (uncomment and replace):
+# github: [ cenktekin ]
+# patreon: cenktekin
+# open_collective: your-collective
+# ko_fi: cenktekin
+# liberapay: cenktekin
+# custom: ["https://buymeacoffee.com/cenktekin", "https://paypal.me/your-handle"]
+
+# Currently left blank intentionally. See README below for how to enable.
