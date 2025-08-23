@@ -2,12 +2,12 @@
 	"manifest_version": 1,
 	"id": "com.cenktekin.ai-tag-suggester",
 	"app_min_version": "2.10",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"name": "AI Tag Suggester",
 	"description": "An AI-powered tag suggestion tool that analyzes note content to recommend relevant tags. Users can select from the suggestions and apply them to their notes, streamlining the organization process.",
 	"author": "CenkTekin",
 	"homepage_url": "https://github.com/cenktekin/joplin-auto-tagger",
 	"repository_url": "https://github.com/cenktekin/joplin-auto-tagger",
 	"keywords": ["joplin-plugin", "ai", "gemini", "tags", "organization"],
-	"categories": ["productivity", "tools"]
+	"categories": ["productivity", "tags"]
 }
