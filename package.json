@@ -1,6 +1,6 @@
 {
   "name": "joplin-plugin-ai-tag-suggester",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "scripts": {
     "build": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtra",
     "dist": "npm run build && node scripts/pack-jpl.js",

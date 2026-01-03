@@ -118,12 +118,17 @@ async function applyTagsToNote(noteId: string, tags: string[]) {
 
 joplin.plugins.register({
     onStart: async function() {
-        console.info('AI Tag Suggester plugin started!');
+        console.info('AI Tag Suggester plugin initializing...');
 
-        await joplin.settings.registerSection('aiTagSuggesterSection', {
-            label: 'AI Tag Suggester',
-            iconName: 'fas fa-tags',
-        });
+        try {
+            await joplin.settings.registerSection('aiTagSuggesterSection', {
+                label: 'AI Tag Suggester',
+                iconName: 'fas fa-tags',
+            });
+            console.info('[AI Tag Suggester] Settings section registered');
+        } catch (error) {
+            console.error('[AI Tag Suggester] Failed to register settings section:', error);
+        }
 
         await joplin.settings.registerSettings({
             geminiApiKey: {
@@ -159,7 +164,16 @@ joplin.plugins.register({
                 label: 'OpenRouter Model',
                 description: 'e.g., openrouter/auto or meta-llama/Meta-Llama-3.1-8B-Instruct',
             },
+            outputLanguage: {
+                value: 'English',
+                type: SettingItemType.String,
+                section: 'aiTagSuggesterSection',
+                public: true,
+                label: 'Output Language',
+                description: 'Language for generated tags (e.g., English, Traditional Chinese, Turkish).',
+            },
         });
+        console.info('[AI Tag Suggester] Settings registered successfully');
 
         panel = await joplin.views.panels.create('ai_tag_suggester_panel');
         console.info('[AI Tag Suggester] Panel created:', panel);
@@ -198,8 +212,9 @@ joplin.plugins.register({
                 const geminiApiKey = await joplin.settings.value('geminiApiKey');
                 const openrouterApiKey = await joplin.settings.value('openrouterApiKey');
                 const openrouterModel = (await joplin.settings.value('openrouterModel')) || 'openrouter/auto';
+                const outputLanguage = (await joplin.settings.value('outputLanguage')) || 'English';
 
-                const prompt = `You are an expert at analyzing text and extracting key topics to be used as tags.\nAnalyze the following note content. Based on your analysis, generate exactly 5 relevant and concise tags.\nEach tag should be 1-3 words long and use lowercase letters, with hyphens instead of spaces (e.g., 'project-management').\nReturn your response as a JSON object with the shape { \"tags\": string[] } and nothing else.\n\nNote Content:\n---\n${message.noteContent}\n---`;
+                const prompt = `You are an expert at analyzing text and extracting key topics to be used as tags.\nAnalyze the following note content. Based on your analysis, generate exactly 5 relevant and concise tags in ${outputLanguage}.\nEach tag should be 1-3 words long and use lowercase letters, with hyphens instead of spaces (e.g., 'project-management').\nReturn your response as a JSON object with the shape { \"tags\": string[] } and nothing else.\n\nNote Content:\n---\n${message.noteContent}\n---`;
 
                 // OpenRouter path (if selected or Gemini key missing but OpenRouter key present)
                 const useOpenRouter = provider === 'openrouter' || (!geminiApiKey && !!openrouterApiKey);
