@@ -16,6 +16,7 @@
 Suggest relevant tags for your Joplin notes using AI.
 
 Providers:
+
 - Gemini (default)
 - OpenRouter
 
@@ -23,17 +24,19 @@ Providers:
 
 Prerequisites: Node.js, Joplin Desktop.
 
-1) Install dependencies
+1. Install dependencies
+
 ```
 npm install
 ```
 
-2) Build the plugin and pack a .jpl
+2. Build the plugin and pack a .jpl
+
 ```
 npm run dist
 ```
 
-3) In Joplin Desktop, go to Tools → Options → Plugins → Install from file and select the generated .jpl in the `publish/` folder.
+3. In Joplin Desktop, go to Tools → Options → Plugins → Install from file and select the generated .jpl in the `publish/` folder.
 
 ## Configuration
 
@@ -45,17 +48,19 @@ Settings in `src/index.ts` are registered as Joplin settings:
 - geminiApiKey: Your Google Gemini API key
 - openrouterApiKey: Your OpenRouter API key
 - openrouterModel: Model id (default: `openrouter/auto`)
+- outputLanguage: Language for generated tags (default: `English`). Examples: "Traditional Chinese", "Turkish".
 
 Notes:
+
 - For Gemini, the plugin tries: `gemini-2.5-flash`, `gemini-1.5-flash`, `gemini-1.5-flash-8b`.
 - For OpenRouter, the plugin calls `https://openrouter.ai/api/v1/chat/completions` with a structured prompt and expects JSON `{ "tags": string[] }`.
 
 ## Usage
 
-1) Open any note in Joplin.
-2) Tools → Toggle AI Tag Suggester to open the side panel. Shortcut: Ctrl+Shift+Y (macOS: Cmd+Shift+Y).
-3) Click "Suggest Tags". The plugin will analyze the note and return 5 concise, lowercase, hyphenated tags.
-4) Click tags to select/deselect, then "Apply" to add them to the note.
+1. Open any note in Joplin.
+2. Tools → Toggle AI Tag Suggester to open the side panel. Shortcut: Ctrl+Shift+Y (macOS: Cmd+Shift+Y).
+3. Click "Suggest Tags". The plugin will analyze the note and return 5 concise, lowercase, hyphenated tags.
+4. Click tags to select/deselect, then "Apply" to add them to the note.
 
 ## Screenshots
 
@@ -74,11 +79,13 @@ Notes:
 ## Development
 
 Build:
+
 ```
 npm run build
 ```
 
 Pack distributable:
+
 ```
 npm run dist
 ```
