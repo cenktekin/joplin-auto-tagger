@@ -28,3 +28,7 @@ archive/
 *.jpl
 publish/*.jpl
 *.bak
+joplin-plugin-ai-tag-suggester-1.0.2.tgz
+
+# Defter (session notes)
+defter/

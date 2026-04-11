@@ -1,5 +1,8 @@
 # Joplin AI Tag Suggester
 
+> [!IMPORTANT]
+> **Package Migration Notice**: This plugin has been migrated to a new scoped package on npm. The old package `joplin-plugin-ai-tag-suggester` is no longer maintained. Please use **[@cenktekin2008/joplin-plugin-ai-tag-suggester](https://www.npmjs.com/package/@cenktekin2008/joplin-plugin-ai-tag-suggester)** for all future updates.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/cenktekin/joplin-auto-tagger/main/logo.png" alt="Joplin AI Tag Suggester" width="240" />
   <br/>

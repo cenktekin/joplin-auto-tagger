@@ -1,5 +1,5 @@
 {
-  "name": "joplin-plugin-ai-tag-suggester",
+  "name": "@cenktekin2008/joplin-plugin-ai-tag-suggester",
   "version": "1.0.6",
   "scripts": {
     "build": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtra",

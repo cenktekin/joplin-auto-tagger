@@ -4,6 +4,7 @@
 
 - **New**: Added "Output Language" setting to generate tags in different languages.
 - **Improved**: Enhanced logging for easier debugging of configuration issues.
+- **Migration**: Published under new scoped package name `@cenktekin2008/joplin-plugin-ai-tag-suggester`.
 
 ## v1.0.0 — 2025-08-23
 
