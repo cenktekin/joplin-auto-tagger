@@ -1,0 +1,15 @@
+#!/bin/sh
+echo "🔍 Running gitleaks pre-commit scan..."
+
+git diff --cached | gitleaks detect --pipe --no-banner 2>&1
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "❌ COMMIT BLOCKED: Secrets detected in staged changes!"
+    echo "   Remove secrets before committing."
+    exit 1
+fi
+
+echo "✅ No secrets detected in staged changes."
+exit 0

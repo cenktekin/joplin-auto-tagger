@@ -1,0 +1,22 @@
+#!/bin/sh
+echo "🔍 Running pre-push gitleaks scan..."
+
+while read local_ref local_sha remote_ref remote_sha; do
+    if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+        RANGE="$local_sha"
+    else
+        RANGE="${remote_sha}..${local_sha}"
+    fi
+
+    gitleaks detect --no-banner --log-opts="$RANGE" 2>&1
+    EXIT_CODE=$?
+
+    if [ $EXIT_CODE -ne 0 ]; then
+        echo ""
+        echo "❌ PUSH BLOCKED: Secrets detected in outgoing commits!"
+        exit 1
+    fi
+done
+
+echo "✅ No secrets found in outgoing commits."
+exit 0
