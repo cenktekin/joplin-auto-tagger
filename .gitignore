@@ -37,3 +37,8 @@ joplin-plugin-ai-tag-suggester-1.0.2.tgz
 
 # Defter (session notes)
 defter/
+
+# Project template files (auto-generated)
+* - Genel Bakış.md
+* - Günlük Notlar.md
+* - Geliştirme Fikirleri.md
