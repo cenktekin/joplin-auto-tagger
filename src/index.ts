@@ -18,8 +18,8 @@ async function pushThemeToPanel() {
         currentTheme = theme;
         await joplin.views.panels.postMessage(panel, { name: 'theme', value: theme });
         console.info('[AI Tag Suggester] Pushed theme to webview:', theme);
-    } catch (e) {
-        console.warn('[AI Tag Suggester] Unable to read/push theme, will rely on webview defaults:', e);
+    } catch (error) {
+        console.warn('[AI Tag Suggester] Unable to read/push theme, will rely on webview defaults:', error);
     }
 }
 
