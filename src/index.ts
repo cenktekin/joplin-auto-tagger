@@ -1,8 +1,6 @@
 import { SettingItemType } from 'api/types';
 import { GoogleGenAI, Type } from '@google/genai';
 import { request as gaxiosRequest } from 'gaxios';
-import * as fs from 'fs';
-import * as path from 'path';
 
 // The Joplin API object is provided as a global, so we declare it here
 // to make TypeScript aware of it.
@@ -21,7 +19,7 @@ async function pushThemeToPanel() {
         await joplin.views.panels.postMessage(panel, { name: 'theme', value: theme });
         console.info('[AI Tag Suggester] Pushed theme to webview:', theme);
     } catch (e) {
-        console.warn('[AI Tag Suggester] Unable to read/push theme, will rely on webview defaults');
+        console.warn('[AI Tag Suggester] Unable to read/push theme, will rely on webview defaults:', e);
     }
 }
 
@@ -136,6 +134,7 @@ joplin.plugins.register({
                 type: SettingItemType.String,
                 section: 'aiTagSuggesterSection',
                 public: true,
+                secure: true,
                 label: 'Google Gemini API Key',
                 description: 'Your API key for the Google Gemini API.',
             },
@@ -179,7 +178,7 @@ joplin.plugins.register({
         console.info('[AI Tag Suggester] Panel created:', panel);
 
         // Register message handler BEFORE loading the webview so early messages are received
-        joplin.views.panels.onMessage(panel, async (message) => {
+        joplin.views.panels.onMessage(panel, async (message: any) => {
             console.info('[AI Tag Suggester] onMessage received:', message?.name);
             if (message.name === 'webviewReady') {
                 panelReady = true;
@@ -214,7 +213,14 @@ joplin.plugins.register({
                 const openrouterModel = (await joplin.settings.value('openrouterModel')) || 'openrouter/auto';
                 const outputLanguage = (await joplin.settings.value('outputLanguage')) || 'English';
 
-                const prompt = `You are an expert at analyzing text and extracting key topics to be used as tags.\nAnalyze the following note content. Based on your analysis, generate exactly 5 relevant and concise tags in ${outputLanguage}.\nEach tag should be 1-3 words long and use lowercase letters, with hyphens instead of spaces (e.g., 'project-management').\nReturn your response as a JSON object with the shape { \"tags\": string[] } and nothing else.\n\nNote Content:\n---\n${message.noteContent}\n---`;
+                const existingTags: string[] = Array.isArray(message.noteTags)
+                    ? message.noteTags.map((t: unknown) => String(t ?? '').trim()).filter((t: string) => t.length > 0).slice(0, 30)
+                    : [];
+                const existingTagsInstruction = existingTags.length > 0
+                    ? ' The note already carries these tags: ' + existingTags.join(', ') + '. Do not suggest them again; propose complementary tags only.'
+                    : '';
+
+                const prompt = `You are an expert at analyzing text and extracting key topics to be used as tags.\nAnalyze the following note content. Based on your analysis, generate exactly 5 relevant and concise tags in ${outputLanguage}.\nEach tag should be 1-3 words long and use lowercase letters, with hyphens instead of spaces (e.g., 'project-management').${existingTagsInstruction}\nReturn your response as a JSON object with the shape { \"tags\": string[] } and nothing else.\n\nNote Content:\n---\n${message.noteContent}\n---`;
 
                 // OpenRouter path (if selected or Gemini key missing but OpenRouter key present)
                 const useOpenRouter = provider === 'openrouter' || (!geminiApiKey && !!openrouterApiKey);
@@ -325,7 +331,9 @@ joplin.plugins.register({
             joplin.settings.onChange(async (_event: any) => {
                 await pushThemeToPanel();
             });
-        } catch {}
+        } catch (error) {
+            console.warn('[AI Tag Suggester] settings.onChange could not be registered; theme will not follow host changes:', error);
+        }
 
         await joplin.commands.register({
             name: 'toggleTagSuggesterPanel',

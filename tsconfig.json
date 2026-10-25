@@ -10,6 +10,7 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
+    "strict": true,
     "types": [
       "node"
     ],
@@ -30,5 +31,11 @@
     "allowSyntheticDefaultImports": true,
     // "allowImportingTsExtensions": true,
     "noEmit": false
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "publish",
+    "archive"
+  ]
 }

@@ -1,0 +1,18 @@
+* text=auto
+
+*.sh eol=lf
+*.yml eol=lf
+*.yaml eol=lf
+*.md eol=lf
+*.json eol=lf
+*.ts eol=lf
+*.tsx eol=lf
+*.js eol=lf
+
+*.png binary
+*.jpg binary
+*.jpe?g binary
+*.gif binary
+*.ico binary
+*.jpl binary
+*.tgz binary

@@ -3,6 +3,7 @@
   "version": "1.0.6",
   "scripts": {
     "build": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtra",
+    "typecheck": "tsc --noEmit",
     "dist": "npm run build && node scripts/pack-jpl.js",
     "update": "npm install -g generator-joplin && yo joplin --update",
     "prepublishOnly": "npm run dist && node scripts/pack-jpl.js && cp dist/manifest.json ./manifest.json"

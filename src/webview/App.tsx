@@ -57,7 +57,9 @@ export default function App() {
                     const html = document.documentElement;
                     html.setAttribute('data-theme', isDark ? 'dark' : 'light');
                     console.log('[AI Tag Suggester] Applied theme from host:', { value: v, isDark });
-                } catch {}
+                } catch (err) {
+                    console.warn('[AI Tag Suggester] Failed to apply host theme, keeping default:', err);
+                }
             }
             if (payload && payload.name === 'noteDataUpdate') {
                 console.log('[AI Tag Suggester] noteDataUpdate received', payload?.note ? { id: payload.note.id, title: payload.note.title, tags: payload.note.tags } : null);
@@ -76,7 +78,9 @@ export default function App() {
         // Fallback: explicitly request current note in case initial push was missed
         webviewApi?.postMessage?.({ name: 'requestCurrentNote' });
         return () => {
-            try { if (typeof unsubscribe === 'function') unsubscribe(); } catch {}
+            try { if (typeof unsubscribe === 'function') unsubscribe(); } catch (err) {
+                console.warn('[AI Tag Suggester] Failed to unsubscribe from webview messages:', err);
+            }
         };
     }, []);
 
@@ -92,8 +96,8 @@ export default function App() {
         setSelectedTags([]);
         try {
             console.log('[AI Tag Suggester] suggestTags -> sending to main');
-            // The second parameter is unused; main plugin validates keys.
-            const tags = await suggestTags(currentNote.content, '');
+            // Existing tags are forwarded so the provider avoids repeating them.
+            const tags = await suggestTags(currentNote.content, currentNote.tags ?? []);
             console.log('[AI Tag Suggester] suggestTags <- received', tags);
             setSuggestedTags(tags);
         } catch (err: unknown) {

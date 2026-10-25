@@ -1,34 +1,32 @@
 # 🩺 Joplin Auto-Tagger — Proje Sağlık Raporu
 
-**Tarih:** 2026-05-19  
-**Denetçi:** OMO Auditor
+**Son ölçüm:** 2026-10-25 (önceki ölçüm 2026-05-19)
+**Yöntem:** kapılar gerçekten koşturuldu (`tsc --noEmit`, `npm run build`, `git status`), tahmin yok.
 
 ---
 
-## Sağlık Puanı: 72/100 🟡
+## Sağlık Puanı: 78/100 🟡
 
-| Kriter | Puan | Açıklama |
-|--------|------|----------|
-| Dokümantasyon | 16/20 | README 104 satır, CHANGELOG, CONTRIBUTING, SECURITY, GENERATOR_DOC |
-| Kod Kalitesi | 15/20 | Temiz TypeScript, webview/içerik script ayrımı, tip güvenliği iyi |
-| Test Coverage | 5/15 | CI var (build/test), ama anlamlı test yok |
-| Git Sağlığı | 10/15 | 17 commit, .githooks mevcut |
-| Yayın Durumu | 10/10 | npm'de yayında (@cenktekin2008/joplin-plugin-ai-tag-suggester v1.0.6) |
-| Altyapı | 10/10 | Webpack, TS, CI/CD (GitHub Actions), .env.local |
-| Bakım | 6/10 | Güncelleme yapılmış (v1.0.6), ama 17 commit az |
+| Kriter | Puan | Önceki | Gerekçe |
+|--------|------|--------|---------|
+| Dokümantasyon | 17/20 | 16 | README/CHANGELOG/CONTRIBUTING/SECURITY/GENERATOR_DOC; CHANGELOG 1.0.1–1.0.5 boşluğu kapatıldı |
+| Kod Kalitesi | 17/20 | 15 | `strict: true` açık, ölü kod ve boş catch yok; `onStart` hâlâ 232 satır |
+| Test Coverage | 5/15 | 5 | **Hâlâ 0 test** — CI yalnız derleme yapıyor |
+| Git Sağlığı | 14/15 | 10 | mode-churn bitti, `.gitattributes` var; geçmiş squashed (tek baseline) |
+| Yayın Durumu | 10/10 | 10 | npm 1.0.6 + GitHub Release + `.jpl` üretiliyor |
+| Altyapı | 10/10 | 10 | Webpack + TS + CI (typecheck + build + dist) |
+| Bakım | 5/10 | 6 | Son sürüm 2026-01; 9 aydır yeni özellik yok |
 
 ---
 
 ## Güçlü Yanlar 💪
 
-- **Yayınlanmış npm paketi**: `@cenktekin2008/joplin-plugin-ai-tag-suggester` v1.0.6
-- **İyi dokümantasyon**: Ekran görüntüleri (4 adet), CHANGELOG, CONTRIBUTING, SECURITY, GENERATOR_DOC
-- **Çoklu AI sağlayıcı**: Gemini (default) + OpenRouter desteği
-- **CI/CD pipelines**: GitHub Actions build.yml, otomatik build + test
-- **Plugin mimarisi**: Joplin API tip tanımları (api/ klasörü), webview/ + content script ayrımı
-- **Profesyonel paketleme**: Webpack + jpl pack script, `npm run dist` ile dağıtım
-- **Çift panel sistemi**: Side panel + settings entegrasyonu
-- **Buy Me a Coffee linki**: Topluluk desteği mekanizması var
+- **Yayınlanmış npm paketi**: `@cenktekin2008/joplin-plugin-ai-tag-suggester` v1.0.6 (scoped) + eski scopesuz paket.
+- **Çoklu AI sağlayıcı**: Gemini (default) + OpenRouter.
+- **Temiz tip kapısı**: `tsc --noEmit` strict modda 0 hata.
+- **Tekrarlayan derleme**: `npm run build` / `npm run dist` exit 0, `publish/*.jpl` üretiliyor.
+- **Gizlilik altyapısı**: pre-commit/pre-push secret taraması + GitHub Actions secret scan.
+- **Anahtar güvenliği**: iki sağlayıcı anahtarı da `secure: true` (Joplin tarafından maskelenir).
 
 ---
 
@@ -36,13 +34,12 @@
 
 | Risk | Seviye | Detay |
 |------|--------|-------|
-| **api/types.ts (869 satır)** | 🟡 | Auto-generated Joplin API tipleri, commit edilmiş. Güncellemesi kolay unutulabilir |
-| **17 commit** | 🟡 | Orta seviye. Daha fazla commit beklenir |
-| **TypeScript v4.x** | 🟡 | TS 4.8.2 (2022). Güncel değil (TS 5.x+), güvenlik güncellemeleri kaçmış olabilir |
-| **AI API bağımlılığı** | 🟡 | Gemini/OpenRouter API'siz plugin çalışmaz. Offline mod yok |
-| **Test kapsamı** | 🟡 | CI'da test çalışıyor ama kapsam belirsiz |
-| **Webpack config** | 🟡 | Eski webpack v5, eski loader'lar (ts-loader v9) |
-| **Dosya boyutu** | 🟡 | api/ klasörü 25 dosya, çoğu otomatik oluşturulmuş. Sürdürme yükü |
+| **Test yok** | 🔴 | Davranış tamamen elle doğrulamaya bağlı; prompt/ayrıştırma mantığı regresyona açık |
+| **Joplin Plugin Repo'da yok** | 🟡 | `manifests/com.cenktekin.ai-tag-suggester.json` → 404; kullanıcılar yalnız npm/GitHub'dan kurabilir |
+| **`onStart` monoliti** | 🟡 | 232 satır, 4+ sorumluluk; 50 satır kuralını aşıyor |
+| **`api/types.ts` (869 satır)** | 🟡 | Joplin API otomatik üretimi, elle güncelleniyor |
+| **TypeScript 4.9** | 🟡 | TS 5.x değil; ts-loader ile uyum nedeniyle ertelenebilir |
+| **AI API bağımlılığı** | 🟡 | Anahtarsız plugin çalışmaz; offline fallback bilinçli olarak reddedildi |
 
 ---
 
@@ -50,21 +47,21 @@
 
 | # | Öneri | Öncelik |
 |---|-------|---------|
-| 1 | **TypeScript 5.x'e geç**: TS 4.8 → 5.x, güvenlik ve performans kazanımları | Orta |
-| 2 | **api/types.ts yönetimi**: Auto-generated dosyayı `.gitignore` yap ve CI'da generate et | Orta |
-| 3 | **Offline fallback**: AI API yokken çalışan basit bir tag öneri mekanizması (ör: kelime frekansı) | Düşük |
+| 1 | Saf fonksiyonları ayır + vitest ile ≥15 test (prompt, tag normalize, JSON ayrıştırma) | Yüksek |
+| 2 | `onStart` bölme: settings / message handlers / suggest akışı | Orta |
+| 3 | Joplin Plugin Repo başvurusu (varlık hazır, yalnız PR) | Orta |
+| 4 | TypeScript + loader zincirini birlikte yükselt | Düşük |
 
 ---
 
 ## Detaylar
 
-- **Proje:** @cenktekin2008/joplin-plugin-ai-tag-suggester v1.0.6
+- **Proje:** joplin-plugin-ai-tag-suggester v1.0.6
 - **Lisans:** MIT
-- **Repo:** github.com/cenktekin/joplin-auto-tagger
-- **ID:** com.cenktekin.ai-tag-suggester
-- **Dil:** TypeScript (JSX), React
-- **Toplam kaynak:** ~708 satır (src/) + 869 satır (api/types.ts)
+- **ID:** `com.cenktekin.ai-tag-suggester`
+- **Dil:** TypeScript (TSX), React 18
+- **Kaynak:** ~760 satır (`src/`) + 869 satır (`api/types.ts`)
 - **Joplin min:** v2.10
 - **Build:** Webpack 5 + ts-loader
-- **AI sağlayıcıları:** Gemini (default), OpenRouter
-- **Dağıtım:** npm + GitHub Releases
+- **Sağlayıcılar:** Gemini (default), OpenRouter
+- **Dağıtım:** npm (scoped) + GitHub Releases

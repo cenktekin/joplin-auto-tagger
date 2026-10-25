@@ -6,6 +6,26 @@
 - **Improved**: Enhanced logging for easier debugging of configuration issues.
 - **Migration**: Published under new scoped package name `@cenktekin2008/joplin-plugin-ai-tag-suggester`.
 
+## v1.0.5 — 2025-08-23
+
+- **Docs**: Added plugin screenshots and the promo tile required by the Joplin plugin directory.
+
+## v1.0.4 — 2025-08-23
+
+- **Release**: Added the tags category so the plugin is listed under tagging in the Joplin plugin directory.
+
+## v1.0.3 — 2025-08-23
+
+- **Packaging**: Ship `docs/` in the npm package so README screenshots render on npmjs.com.
+
+## v1.0.2 — 2025-08-23
+
+- **Packaging**: Ship `publish/` in the npm package (required by the Joplin plugin repository).
+
+## v1.0.1 — 2025-08-23
+
+- **Metadata**: Root `manifest.json` is generated on publish; repository and homepage links corrected.
+
 ## v1.0.0 — 2025-08-23
 
 ### Added
